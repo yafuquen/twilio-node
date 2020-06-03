@@ -1,6 +1,26 @@
 twilio-node changelog
 =====================
 
+[2020-06-03] Version 99.99.99
+-----------------------------
+**Autopilot**
+- Add dialogue_sid param to Query list resource
+
+**Contacts**
+- Added AccountSID to CFD CREATE and GET Responses
+
+**Numbers**
+- Add `provisionally-approved` as a Bundle status
+
+**Preview**
+- Deleted phone number required field in the brand phone number endpoint from `kyc-api`
+- Removed insights `preview API` from API Definitions **(breaking change)**
+- Added `BrandsInformation` endpoint to query brands information stored in KYC
+
+**Verify**
+- Webhook resources were added to Verify services and put behind the `api.verify.push` beta feature
+
+
 [2020-05-27] Version 3.44.0
 ---------------------------
 **Api**
