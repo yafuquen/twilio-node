@@ -22,19 +22,20 @@ var Twilio = require('../../../../../../lib');  /* jshint ignore:line */
 var client;
 var holodeck;
 
-describe('ExportAssistant', function() {
+describe('AccessToken', function() {
   beforeEach(function() {
     holodeck = new Holodeck();
     client = new Twilio('ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX', 'AUTHTOKEN', {
       httpClient: holodeck
     });
   });
-  it('should generate valid fetch request',
+  it('should generate valid create request',
     function(done) {
       holodeck.mock(new Response(500, {}));
 
-      var promise = client.autopilot.v1.assistants('UAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
-                                       .exportAssistant().fetch();
+      var opts = {identity: 'identity', factorType: 'push'};
+      var promise = client.verify.v2.services('VAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
+                                    .accessTokens.create(opts);
       promise.then(function() {
         throw new Error('failed');
       }, function(error) {
@@ -42,31 +43,28 @@ describe('ExportAssistant', function() {
         done();
       }).done();
 
-      var assistantSid = 'UAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
-      var url = `https://autopilot.twilio.com/v1/Assistants/${assistantSid}/Export`;
+      var serviceSid = 'VAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
+      var url = `https://verify.twilio.com/v2/Services/${serviceSid}/AccessTokens`;
 
+      var values = {Identity: 'identity', FactorType: 'push', };
       holodeck.assertHasRequest(new Request({
-        method: 'GET',
-        url: url
+          method: 'POST',
+          url: url,
+          data: values
       }));
     }
   );
-  it('should generate valid fetch response',
+  it('should generate valid create response',
     function(done) {
       var body = {
-          'url': 'https://autopilot.twilio.com/v1/Assistants/UAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/Export',
-          'account_sid': 'ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-          'assistant_sid': 'UAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-          'date_created': '2015-07-30T20:00:00Z',
-          'status': 'building',
-          'error_code': null,
-          'schema': {}
+          'token': 'ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
       };
 
-      holodeck.mock(new Response(200, body));
+      holodeck.mock(new Response(201, body));
 
-      var promise = client.autopilot.v1.assistants('UAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
-                                       .exportAssistant().fetch();
+      var opts = {identity: 'identity', factorType: 'push'};
+      var promise = client.verify.v2.services('VAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
+                                    .accessTokens.create(opts);
       promise.then(function(response) {
         expect(response).toBeDefined();
         done();

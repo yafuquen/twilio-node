@@ -5,69 +5,64 @@
  *       /       /
  */
 
-import Page = require('../../../base/Page');
-import Response = require('../../../http/response');
-import V1 = require('../V1');
-import { EntityList } from './service/entity';
-import { EntityListInstance } from './service/entity';
-import { SerializableClass } from '../../../interfaces';
+import Page = require('../../../../../base/Page');
+import Response = require('../../../../../http/response');
+import V2 = require('../../../V2');
+import { SerializableClass } from '../../../../../interfaces';
+
+type ChallengeChallengeReasons = 'none'|'not_needed'|'not_requested';
+
+type ChallengeChallengeStatuses = 'pending'|'expired'|'approved'|'denied';
+
+type ChallengeFactorTypes = 'app-push'|'sms'|'totp'|'push';
 
 /**
- * Initialize the ServiceList
+ * Initialize the ChallengeList
  *
  * PLEASE NOTE that this class contains preview products that are subject to
  * change. Use them with caution. If you currently do not have developer preview
  * access, please contact help@twilio.com.
  *
  * @param version - Version of the resource
+ * @param serviceSid - Service Sid.
+ * @param identity - Unique external identifier of the Entity
  */
-declare function ServiceList(version: V1): ServiceListInstance;
+declare function ChallengeList(version: V2, serviceSid: string, identity: string): ChallengeListInstance;
 
 /**
  * Options to pass to fetch
  *
  * @property twilioSandboxMode - The Twilio-Sandbox-Mode HTTP request header
  */
-interface ServiceInstanceFetchOptions {
-  twilioSandboxMode?: string;
-}
-
-/**
- * Options to pass to remove
- *
- * @property twilioSandboxMode - The Twilio-Sandbox-Mode HTTP request header
- */
-interface ServiceInstanceRemoveOptions {
+interface ChallengeInstanceFetchOptions {
   twilioSandboxMode?: string;
 }
 
 /**
  * Options to pass to update
  *
- * @property friendlyName - A human readable description of this resource.
- * @property push - Optional service level push factors configuration
+ * @property authPayload - Optional payload to verify the Challenge
  * @property twilioSandboxMode - The Twilio-Sandbox-Mode HTTP request header
  */
-interface ServiceInstanceUpdateOptions {
-  friendlyName?: string;
-  push?: string;
+interface ChallengeInstanceUpdateOptions {
+  authPayload?: string;
   twilioSandboxMode?: string;
 }
 
-interface ServiceListInstance {
+interface ChallengeListInstance {
   /**
    * @param sid - sid of instance
    */
-  (sid: string): ServiceContext;
+  (sid: string): ChallengeContext;
   /**
-   * create a ServiceInstance
+   * create a ChallengeInstance
    *
    * @param opts - Options for request
    * @param callback - Callback to handle processed record
    */
-  create(opts: ServiceListInstanceCreateOptions, callback?: (error: Error | null, item: ServiceInstance) => any): Promise<ServiceInstance>;
+  create(opts: ChallengeListInstanceCreateOptions, callback?: (error: Error | null, item: ChallengeInstance) => any): Promise<ChallengeInstance>;
   /**
-   * Streams ServiceInstance records from the API.
+   * Streams ChallengeInstance records from the API.
    *
    * This operation lazily loads records as efficiently as possible until the limit
    * is reached.
@@ -80,9 +75,9 @@ interface ServiceListInstance {
    *
    * @param callback - Function to process each record
    */
-  each(callback?: (item: ServiceInstance, done: (err?: Error) => void) => void): void;
+  each(callback?: (item: ChallengeInstance, done: (err?: Error) => void) => void): void;
   /**
-   * Streams ServiceInstance records from the API.
+   * Streams ChallengeInstance records from the API.
    *
    * This operation lazily loads records as efficiently as possible until the limit
    * is reached.
@@ -96,15 +91,15 @@ interface ServiceListInstance {
    * @param opts - Options for request
    * @param callback - Function to process each record
    */
-  each(opts?: ServiceListInstanceEachOptions, callback?: (item: ServiceInstance, done: (err?: Error) => void) => void): void;
+  each(opts?: ChallengeListInstanceEachOptions, callback?: (item: ChallengeInstance, done: (err?: Error) => void) => void): void;
   /**
-   * Constructs a service
+   * Constructs a challenge
    *
-   * @param sid - A string that uniquely identifies this Service.
+   * @param sid - A string that uniquely identifies this Challenge.
    */
-  get(sid: string): ServiceContext;
+  get(sid: string): ChallengeContext;
   /**
-   * Retrieve a single target page of ServiceInstance records from the API.
+   * Retrieve a single target page of ChallengeInstance records from the API.
    *
    * The request is executed immediately.
    *
@@ -113,9 +108,9 @@ interface ServiceListInstance {
    *
    * @param callback - Callback to handle list of records
    */
-  getPage(callback?: (error: Error | null, items: ServicePage) => any): Promise<ServicePage>;
+  getPage(callback?: (error: Error | null, items: ChallengePage) => any): Promise<ChallengePage>;
   /**
-   * Retrieve a single target page of ServiceInstance records from the API.
+   * Retrieve a single target page of ChallengeInstance records from the API.
    *
    * The request is executed immediately.
    *
@@ -125,18 +120,18 @@ interface ServiceListInstance {
    * @param targetUrl - API-generated URL for the requested results page
    * @param callback - Callback to handle list of records
    */
-  getPage(targetUrl?: string, callback?: (error: Error | null, items: ServicePage) => any): Promise<ServicePage>;
+  getPage(targetUrl?: string, callback?: (error: Error | null, items: ChallengePage) => any): Promise<ChallengePage>;
   /**
-   * Lists ServiceInstance records from the API as a list.
+   * Lists ChallengeInstance records from the API as a list.
    *
    * If a function is passed as the first argument, it will be used as the callback
    * function.
    *
    * @param callback - Callback to handle list of records
    */
-  list(callback?: (error: Error | null, items: ServiceInstance[]) => any): Promise<ServiceInstance[]>;
+  list(callback?: (error: Error | null, items: ChallengeInstance[]) => any): Promise<ChallengeInstance[]>;
   /**
-   * Lists ServiceInstance records from the API as a list.
+   * Lists ChallengeInstance records from the API as a list.
    *
    * If a function is passed as the first argument, it will be used as the callback
    * function.
@@ -144,9 +139,9 @@ interface ServiceListInstance {
    * @param opts - Options for request
    * @param callback - Callback to handle list of records
    */
-  list(opts?: ServiceListInstanceOptions, callback?: (error: Error | null, items: ServiceInstance[]) => any): Promise<ServiceInstance[]>;
+  list(opts?: ChallengeListInstanceOptions, callback?: (error: Error | null, items: ChallengeInstance[]) => any): Promise<ChallengeInstance[]>;
   /**
-   * Retrieve a single page of ServiceInstance records from the API.
+   * Retrieve a single page of ChallengeInstance records from the API.
    *
    * The request is executed immediately.
    *
@@ -155,9 +150,9 @@ interface ServiceListInstance {
    *
    * @param callback - Callback to handle list of records
    */
-  page(callback?: (error: Error | null, items: ServicePage) => any): Promise<ServicePage>;
+  page(callback?: (error: Error | null, items: ChallengePage) => any): Promise<ChallengePage>;
   /**
-   * Retrieve a single page of ServiceInstance records from the API.
+   * Retrieve a single page of ChallengeInstance records from the API.
    *
    * The request is executed immediately.
    *
@@ -167,7 +162,7 @@ interface ServiceListInstance {
    * @param opts - Options for request
    * @param callback - Callback to handle list of records
    */
-  page(opts?: ServiceListInstancePageOptions, callback?: (error: Error | null, items: ServicePage) => any): Promise<ServicePage>;
+  page(opts?: ChallengeListInstancePageOptions, callback?: (error: Error | null, items: ChallengePage) => any): Promise<ChallengePage>;
   /**
    * Provide a user-friendly representation
    */
@@ -177,13 +172,17 @@ interface ServiceListInstance {
 /**
  * Options to pass to create
  *
- * @property friendlyName - A human readable description of this resource.
- * @property push - Optional service level push factors configuration
+ * @property details - Public details provided to contextualize the Challenge
+ * @property expirationDate - The future date in which this Challenge will expire
+ * @property factorSid - Factor Sid.
+ * @property hiddenDetails - Hidden details provided to contextualize the Challenge
  * @property twilioSandboxMode - The Twilio-Sandbox-Mode HTTP request header
  */
-interface ServiceListInstanceCreateOptions {
-  friendlyName: string;
-  push?: string;
+interface ChallengeListInstanceCreateOptions {
+  details?: string;
+  expirationDate?: Date;
+  factorSid: string;
+  hiddenDetails?: string;
   twilioSandboxMode?: string;
 }
 
@@ -194,6 +193,7 @@ interface ServiceListInstanceCreateOptions {
  *                         Function to process each record. If this and a positional
  *                         callback are passed, this one will be used
  * @property done - Function to be called upon completion of streaming
+ * @property factorSid - Factor Sid.
  * @property limit -
  *                         Upper limit for the number of records to return.
  *                         each() guarantees never to return more than limit.
@@ -204,19 +204,23 @@ interface ServiceListInstanceCreateOptions {
  *                         If no pageSize is defined but a limit is defined,
  *                         each() will attempt to read the limit with the most efficient
  *                         page size, i.e. min(limit, 1000)
+ * @property status - The Status of theChallenges to fetch
  * @property twilioSandboxMode - The Twilio-Sandbox-Mode HTTP request header
  */
-interface ServiceListInstanceEachOptions {
-  callback?: (item: ServiceInstance, done: (err?: Error) => void) => void;
+interface ChallengeListInstanceEachOptions {
+  callback?: (item: ChallengeInstance, done: (err?: Error) => void) => void;
   done?: Function;
+  factorSid?: string;
   limit?: number;
   pageSize?: number;
+  status?: ChallengeChallengeStatuses;
   twilioSandboxMode?: string;
 }
 
 /**
  * Options to pass to list
  *
+ * @property factorSid - Factor Sid.
  * @property limit -
  *                         Upper limit for the number of records to return.
  *                         list() guarantees never to return more than limit.
@@ -227,110 +231,115 @@ interface ServiceListInstanceEachOptions {
  *                         If no page_size is defined but a limit is defined,
  *                         list() will attempt to read the limit with the most
  *                         efficient page size, i.e. min(limit, 1000)
+ * @property status - The Status of theChallenges to fetch
  * @property twilioSandboxMode - The Twilio-Sandbox-Mode HTTP request header
  */
-interface ServiceListInstanceOptions {
+interface ChallengeListInstanceOptions {
+  factorSid?: string;
   limit?: number;
   pageSize?: number;
+  status?: ChallengeChallengeStatuses;
   twilioSandboxMode?: string;
 }
 
 /**
  * Options to pass to page
  *
+ * @property factorSid - Factor Sid.
  * @property pageNumber - Page Number, this value is simply for client state
  * @property pageSize - Number of records to return, defaults to 50
  * @property pageToken - PageToken provided by the API
+ * @property status - The Status of theChallenges to fetch
  * @property twilioSandboxMode - The Twilio-Sandbox-Mode HTTP request header
  */
-interface ServiceListInstancePageOptions {
+interface ChallengeListInstancePageOptions {
+  factorSid?: string;
   pageNumber?: number;
   pageSize?: number;
   pageToken?: string;
+  status?: ChallengeChallengeStatuses;
   twilioSandboxMode?: string;
 }
 
-interface ServicePayload extends ServiceResource, Page.TwilioResponsePayload {
+interface ChallengePayload extends ChallengeResource, Page.TwilioResponsePayload {
 }
 
-interface ServiceResource {
+interface ChallengeResource {
   account_sid: string;
-  configuration: object;
   date_created: Date;
+  date_responded: Date;
   date_updated: Date;
-  friendly_name: string;
-  links: string;
+  details: string;
+  entity_sid: string;
+  expiration_date: Date;
+  factor_sid: string;
+  factor_type: ChallengeFactorTypes;
+  hidden_details: string;
+  identity: string;
+  responded_reason: ChallengeChallengeReasons;
+  service_sid: string;
   sid: string;
+  status: ChallengeChallengeStatuses;
   url: string;
 }
 
-interface ServiceSolution {
+interface ChallengeSolution {
+  identity?: string;
+  serviceSid?: string;
 }
 
 
-declare class ServiceContext {
+declare class ChallengeContext {
   /**
-   * Initialize the ServiceContext
+   * Initialize the ChallengeContext
    *
    * PLEASE NOTE that this class contains preview products that are subject to
    * change. Use them with caution. If you currently do not have developer preview
    * access, please contact help@twilio.com.
    *
    * @param version - Version of the resource
-   * @param sid - A string that uniquely identifies this Service.
+   * @param serviceSid - Service Sid.
+   * @param identity - Unique external identifier of the Entity
+   * @param sid - A string that uniquely identifies this Challenge.
    */
-  constructor(version: V1, sid: string);
+  constructor(version: V2, serviceSid: string, identity: string, sid: string);
 
-  entities: EntityListInstance;
   /**
-   * fetch a ServiceInstance
+   * fetch a ChallengeInstance
    *
    * @param callback - Callback to handle processed record
    */
-  fetch(callback?: (error: Error | null, items: ServiceInstance) => any): Promise<ServiceInstance>;
+  fetch(callback?: (error: Error | null, items: ChallengeInstance) => any): Promise<ChallengeInstance>;
   /**
-   * fetch a ServiceInstance
-   *
-   * @param opts - Options for request
-   * @param callback - Callback to handle processed record
-   */
-  fetch(opts?: ServiceInstanceFetchOptions, callback?: (error: Error | null, items: ServiceInstance) => any): Promise<ServiceInstance>;
-  /**
-   * remove a ServiceInstance
-   *
-   * @param callback - Callback to handle processed record
-   */
-  remove(callback?: (error: Error | null, items: ServiceInstance) => any): Promise<boolean>;
-  /**
-   * remove a ServiceInstance
+   * fetch a ChallengeInstance
    *
    * @param opts - Options for request
    * @param callback - Callback to handle processed record
    */
-  remove(opts?: ServiceInstanceRemoveOptions, callback?: (error: Error | null, items: ServiceInstance) => any): Promise<boolean>;
+  fetch(opts?: ChallengeInstanceFetchOptions, callback?: (error: Error | null, items: ChallengeInstance) => any): Promise<ChallengeInstance>;
   /**
    * Provide a user-friendly representation
    */
   toJSON(): any;
   /**
-   * update a ServiceInstance
+   * update a ChallengeInstance
    *
    * @param callback - Callback to handle processed record
    */
-  update(callback?: (error: Error | null, items: ServiceInstance) => any): Promise<ServiceInstance>;
+  update(callback?: (error: Error | null, items: ChallengeInstance) => any): Promise<ChallengeInstance>;
   /**
-   * update a ServiceInstance
+   * update a ChallengeInstance
    *
    * @param opts - Options for request
    * @param callback - Callback to handle processed record
    */
-  update(opts?: ServiceInstanceUpdateOptions, callback?: (error: Error | null, items: ServiceInstance) => any): Promise<ServiceInstance>;
+  update(opts?: ChallengeInstanceUpdateOptions, callback?: (error: Error | null, items: ChallengeInstance) => any): Promise<ChallengeInstance>;
 }
 
 
-declare class ServiceInstance extends SerializableClass {
+declare class ChallengeInstance extends SerializableClass {
   /**
-   * Initialize the ServiceContext
+   * Initialize the ChallengeContext
    *
    * PLEASE NOTE that this class contains preview products that are subject to
    * change. Use them with caution. If you currently do not have developer preview
@@ -338,72 +347,65 @@ declare class ServiceInstance extends SerializableClass {
    *
    * @param version - Version of the resource
    * @param payload - The instance payload
-   * @param sid - A string that uniquely identifies this Service.
+   * @param serviceSid - Service Sid.
+   * @param identity - Unique external identifier of the Entity
+   * @param sid - A string that uniquely identifies this Challenge.
    */
-  constructor(version: V1, payload: ServicePayload, sid: string);
+  constructor(version: V2, payload: ChallengePayload, serviceSid: string, identity: string, sid: string);
 
-  private _proxy: ServiceContext;
+  private _proxy: ChallengeContext;
   accountSid: string;
-  configuration: any;
   dateCreated: Date;
+  dateResponded: Date;
   dateUpdated: Date;
+  details: string;
+  entitySid: string;
+  expirationDate: Date;
+  factorSid: string;
+  factorType: ChallengeFactorTypes;
   /**
-   * Access the entities
-   */
-  entities(): EntityListInstance;
-  /**
-   * fetch a ServiceInstance
+   * fetch a ChallengeInstance
    *
    * @param callback - Callback to handle processed record
    */
-  fetch(callback?: (error: Error | null, items: ServiceInstance) => any): Promise<ServiceInstance>;
+  fetch(callback?: (error: Error | null, items: ChallengeInstance) => any): Promise<ChallengeInstance>;
   /**
-   * fetch a ServiceInstance
-   *
-   * @param opts - Options for request
-   * @param callback - Callback to handle processed record
-   */
-  fetch(opts?: ServiceInstanceFetchOptions, callback?: (error: Error | null, items: ServiceInstance) => any): Promise<ServiceInstance>;
-  friendlyName: string;
-  links: string;
-  /**
-   * remove a ServiceInstance
-   *
-   * @param callback - Callback to handle processed record
-   */
-  remove(callback?: (error: Error | null, items: ServiceInstance) => any): Promise<boolean>;
-  /**
-   * remove a ServiceInstance
+   * fetch a ChallengeInstance
    *
    * @param opts - Options for request
    * @param callback - Callback to handle processed record
    */
-  remove(opts?: ServiceInstanceRemoveOptions, callback?: (error: Error | null, items: ServiceInstance) => any): Promise<boolean>;
+  fetch(opts?: ChallengeInstanceFetchOptions, callback?: (error: Error | null, items: ChallengeInstance) => any): Promise<ChallengeInstance>;
+  hiddenDetails: string;
+  identity: string;
+  respondedReason: ChallengeChallengeReasons;
+  serviceSid: string;
   sid: string;
+  status: ChallengeChallengeStatuses;
   /**
    * Provide a user-friendly representation
    */
   toJSON(): any;
   /**
-   * update a ServiceInstance
+   * update a ChallengeInstance
    *
    * @param callback - Callback to handle processed record
    */
-  update(callback?: (error: Error | null, items: ServiceInstance) => any): Promise<ServiceInstance>;
+  update(callback?: (error: Error | null, items: ChallengeInstance) => any): Promise<ChallengeInstance>;
   /**
-   * update a ServiceInstance
+   * update a ChallengeInstance
    *
    * @param opts - Options for request
    * @param callback - Callback to handle processed record
    */
-  update(opts?: ServiceInstanceUpdateOptions, callback?: (error: Error | null, items: ServiceInstance) => any): Promise<ServiceInstance>;
+  update(opts?: ChallengeInstanceUpdateOptions, callback?: (error: Error | null, items: ChallengeInstance) => any): Promise<ChallengeInstance>;
   url: string;
 }
 
 
-declare class ServicePage extends Page<V1, ServicePayload, ServiceResource, ServiceInstance> {
+declare class ChallengePage extends Page<V2, ChallengePayload, ChallengeResource, ChallengeInstance> {
   /**
-   * Initialize the ServicePage
+   * Initialize the ChallengePage
    *
    * PLEASE NOTE that this class contains preview products that are subject to
    * change. Use them with caution. If you currently do not have developer preview
@@ -413,18 +415,18 @@ declare class ServicePage extends Page<V1, ServicePayload, ServiceResource, Serv
    * @param response - Response from the API
    * @param solution - Path solution
    */
-  constructor(version: V1, response: Response<string>, solution: ServiceSolution);
+  constructor(version: V2, response: Response<string>, solution: ChallengeSolution);
 
   /**
-   * Build an instance of ServiceInstance
+   * Build an instance of ChallengeInstance
    *
    * @param payload - Payload response from the API
    */
-  getInstance(payload: ServicePayload): ServiceInstance;
+  getInstance(payload: ChallengePayload): ChallengeInstance;
   /**
    * Provide a user-friendly representation
    */
   toJSON(): any;
 }
 
-export { ServiceContext, ServiceInstance, ServiceInstanceFetchOptions, ServiceInstanceRemoveOptions, ServiceInstanceUpdateOptions, ServiceList, ServiceListInstance, ServiceListInstanceCreateOptions, ServiceListInstanceEachOptions, ServiceListInstanceOptions, ServiceListInstancePageOptions, ServicePage, ServicePayload, ServiceResource, ServiceSolution }
+export { ChallengeChallengeReasons, ChallengeChallengeStatuses, ChallengeContext, ChallengeFactorTypes, ChallengeInstance, ChallengeInstanceFetchOptions, ChallengeInstanceUpdateOptions, ChallengeList, ChallengeListInstance, ChallengeListInstanceCreateOptions, ChallengeListInstanceEachOptions, ChallengeListInstanceOptions, ChallengeListInstancePageOptions, ChallengePage, ChallengePayload, ChallengeResource, ChallengeSolution }

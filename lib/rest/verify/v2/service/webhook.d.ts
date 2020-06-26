@@ -27,27 +27,9 @@ type WebhookStatus = 'enabled'|'disabled';
 declare function WebhookList(version: V2, serviceSid: string): WebhookListInstance;
 
 /**
- * Options to pass to fetch
- *
- * @property twilioSandboxMode - The Twilio-Sandbox-Mode HTTP request header
- */
-interface WebhookInstanceFetchOptions {
-  twilioSandboxMode?: string;
-}
-
-/**
- * Options to pass to remove
- *
- * @property twilioSandboxMode - The Twilio-Sandbox-Mode HTTP request header
- */
-interface WebhookInstanceRemoveOptions {
-  twilioSandboxMode?: string;
-}
-
-/**
  * Options to pass to update
  *
- * @property eventTypes - The list of comma-separated events that this Webhook will subscribe to.
+ * @property eventTypes - The array of events that this Webhook is subscribed to.
  * @property friendlyName - The string that you assigned to describe the webhook
  * @property status - The webhook status
  * @property webhookUrl - The URL associated with this Webhook.
@@ -182,17 +164,15 @@ interface WebhookListInstance {
 /**
  * Options to pass to create
  *
- * @property eventTypes - The list of comma-separated events that this Webhook is subscribed to.
+ * @property eventTypes - The array of events that this Webhook is subscribed to.
  * @property friendlyName - The string that you assigned to describe the webhook
  * @property status - The webhook status
- * @property twilioSandboxMode - The Twilio-Sandbox-Mode HTTP request header
  * @property webhookUrl - The URL associated with this Webhook.
  */
 interface WebhookListInstanceCreateOptions {
   eventTypes: string | string[];
   friendlyName: string;
   status?: WebhookStatus;
-  twilioSandboxMode?: string;
   webhookUrl: string;
 }
 
@@ -213,14 +193,12 @@ interface WebhookListInstanceCreateOptions {
  *                         If no pageSize is defined but a limit is defined,
  *                         each() will attempt to read the limit with the most efficient
  *                         page size, i.e. min(limit, 1000)
- * @property twilioSandboxMode - The Twilio-Sandbox-Mode HTTP request header
  */
 interface WebhookListInstanceEachOptions {
   callback?: (item: WebhookInstance, done: (err?: Error) => void) => void;
   done?: Function;
   limit?: number;
   pageSize?: number;
-  twilioSandboxMode?: string;
 }
 
 /**
@@ -236,12 +214,10 @@ interface WebhookListInstanceEachOptions {
  *                         If no page_size is defined but a limit is defined,
  *                         list() will attempt to read the limit with the most
  *                         efficient page size, i.e. min(limit, 1000)
- * @property twilioSandboxMode - The Twilio-Sandbox-Mode HTTP request header
  */
 interface WebhookListInstanceOptions {
   limit?: number;
   pageSize?: number;
-  twilioSandboxMode?: string;
 }
 
 /**
@@ -250,13 +226,11 @@ interface WebhookListInstanceOptions {
  * @property pageNumber - Page Number, this value is simply for client state
  * @property pageSize - Number of records to return, defaults to 50
  * @property pageToken - PageToken provided by the API
- * @property twilioSandboxMode - The Twilio-Sandbox-Mode HTTP request header
  */
 interface WebhookListInstancePageOptions {
   pageNumber?: number;
   pageSize?: number;
   pageToken?: string;
-  twilioSandboxMode?: string;
 }
 
 interface WebhookPayload extends WebhookResource, Page.TwilioResponsePayload {
@@ -302,25 +276,11 @@ declare class WebhookContext {
    */
   fetch(callback?: (error: Error | null, items: WebhookInstance) => any): Promise<WebhookInstance>;
   /**
-   * fetch a WebhookInstance
-   *
-   * @param opts - Options for request
-   * @param callback - Callback to handle processed record
-   */
-  fetch(opts?: WebhookInstanceFetchOptions, callback?: (error: Error | null, items: WebhookInstance) => any): Promise<WebhookInstance>;
-  /**
    * remove a WebhookInstance
    *
    * @param callback - Callback to handle processed record
    */
   remove(callback?: (error: Error | null, items: WebhookInstance) => any): Promise<boolean>;
-  /**
-   * remove a WebhookInstance
-   *
-   * @param opts - Options for request
-   * @param callback - Callback to handle processed record
-   */
-  remove(opts?: WebhookInstanceRemoveOptions, callback?: (error: Error | null, items: WebhookInstance) => any): Promise<boolean>;
   /**
    * Provide a user-friendly representation
    */
@@ -367,13 +327,6 @@ declare class WebhookInstance extends SerializableClass {
    * @param callback - Callback to handle processed record
    */
   fetch(callback?: (error: Error | null, items: WebhookInstance) => any): Promise<WebhookInstance>;
-  /**
-   * fetch a WebhookInstance
-   *
-   * @param opts - Options for request
-   * @param callback - Callback to handle processed record
-   */
-  fetch(opts?: WebhookInstanceFetchOptions, callback?: (error: Error | null, items: WebhookInstance) => any): Promise<WebhookInstance>;
   friendlyName: string;
   /**
    * remove a WebhookInstance
@@ -381,13 +334,6 @@ declare class WebhookInstance extends SerializableClass {
    * @param callback - Callback to handle processed record
    */
   remove(callback?: (error: Error | null, items: WebhookInstance) => any): Promise<boolean>;
-  /**
-   * remove a WebhookInstance
-   *
-   * @param opts - Options for request
-   * @param callback - Callback to handle processed record
-   */
-  remove(opts?: WebhookInstanceRemoveOptions, callback?: (error: Error | null, items: WebhookInstance) => any): Promise<boolean>;
   serviceSid: string;
   sid: string;
   status: WebhookStatus;
@@ -440,4 +386,4 @@ declare class WebhookPage extends Page<V2, WebhookPayload, WebhookResource, Webh
   toJSON(): any;
 }
 
-export { WebhookContext, WebhookInstance, WebhookInstanceFetchOptions, WebhookInstanceRemoveOptions, WebhookInstanceUpdateOptions, WebhookList, WebhookListInstance, WebhookListInstanceCreateOptions, WebhookListInstanceEachOptions, WebhookListInstanceOptions, WebhookListInstancePageOptions, WebhookMethods, WebhookPage, WebhookPayload, WebhookResource, WebhookSolution, WebhookStatus }
+export { WebhookContext, WebhookInstance, WebhookInstanceUpdateOptions, WebhookList, WebhookListInstance, WebhookListInstanceCreateOptions, WebhookListInstanceEachOptions, WebhookListInstanceOptions, WebhookListInstancePageOptions, WebhookMethods, WebhookPage, WebhookPayload, WebhookResource, WebhookSolution, WebhookStatus }

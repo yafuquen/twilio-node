@@ -1,8 +1,74 @@
 twilio-node changelog
 =====================
 
-[2020-06-03] Version 99.99.99
+[2020-06-26] Version 99.99.99
 -----------------------------
+**Conversations**
+- Message delivery receipts
+
+**Flex**
+- Changed `wfm_integrations` Flex Configuration key to private **(breaking change)**
+
+**Messaging**
+- Add error states to WhatsApp Sender status with failed reason **(breaking change)**
+
+
+[2020-06-24] Version 3.47.0
+---------------------------
+**Library - Fix**
+- [PR #584](https://github.com/twilio/twilio-node/pull/584): use datetime instead of date for alert start/end date params. Thanks to [@mebuckler](https://github.com/mebuckler)!
+
+**Api**
+- Added optional `JitterBufferSize` parameter for creating conference participant
+- Added optional `label` property for conference participants
+- Added optional parameter `caller_id` for creating conference participant endpoint.
+
+**Autopilot**
+- Remove Export resource from Autopilot Assistant
+
+**Conversations**
+- Expose Conversation timers
+
+**Monitor**
+- Update start/end date filter params to support date-or-time format **(breaking change)**
+
+**Numbers**
+- Add `provisionally-approved` as a Supporting Document status
+
+**Preview**
+- Removed `Authy` resources. **(breaking change)**
+
+**Supersim**
+- Add ready state to the allowed transitions in the sim update call behind the feature flag supersim.ready-state.v1
+
+**Verify**
+- Webhook resources added to Verify services and put behind the `api.verify.push` beta feature
+
+**Twiml**
+- Add more supported locales for the `Gather` verb.
+
+
+[2020-06-10] Version 3.46.0
+---------------------------
+**Library - Docs**
+- [PR #583](https://github.com/twilio/twilio-node/pull/583): link to handling exceptions. Thanks to [@thinkingserious](https://github.com/thinkingserious)!
+- [PR #582](https://github.com/twilio/twilio-node/pull/582): link to custom HTTP client instructions. Thanks to [@thinkingserious](https://github.com/thinkingserious)!
+
+**Api**
+- Added `pstnconnectivity` to `usage_record` API
+
+**Notify**
+- delivery_callback_url and delivery_callback_enabled added
+
+**Preview**
+- `BrandsInformation` endpoint now returns a single `BrandsInformation`
+
+**Supersim**
+- Require a Network Access Profile when creating a Fleet **(breaking change)**
+
+
+[2020-06-04] Version 3.45.0
+---------------------------
 **Autopilot**
 - Add dialogue_sid param to Query list resource
 
@@ -16,9 +82,6 @@ twilio-node changelog
 - Deleted phone number required field in the brand phone number endpoint from `kyc-api`
 - Removed insights `preview API` from API Definitions **(breaking change)**
 - Added `BrandsInformation` endpoint to query brands information stored in KYC
-
-**Verify**
-- Webhook resources were added to Verify services and put behind the `api.verify.push` beta feature
 
 
 [2020-05-27] Version 3.44.0

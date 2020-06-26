@@ -35,12 +35,7 @@ describe('Webhook', function() {
     function(done) {
       holodeck.mock(new Response(500, {}));
 
-      var opts = {
-        friendlyName: 'friendly_name',
-        eventTypes: ['event_types'],
-        webhookUrl: 'webhook_url',
-        twilioSandboxMode: 'twilio_sandbox_mode'
-      };
+      var opts = {friendlyName: 'friendly_name', eventTypes: ['event_types'], webhookUrl: 'webhook_url'};
       var promise = client.verify.v2.services('VAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
                                     .webhooks.create(opts);
       promise.then(function() {
@@ -63,13 +58,6 @@ describe('Webhook', function() {
           url: url,
           data: values
       }));
-
-      var headers = {'Twilio-Sandbox-Mode': 'twilio_sandbox_mode'};
-      holodeck.assertHasRequest(new Request({
-        method: 'POST',
-        url: url,
-        headers: headers
-      }));
     }
   );
   it('should generate valid create response',
@@ -84,7 +72,7 @@ describe('Webhook', function() {
               'factor.deleted',
               'factor.verified'
           ],
-          'webhook_method': 'post',
+          'webhook_method': 'POST',
           'webhook_url': 'https://owlbank.twilio.com',
           'status': 'enabled',
           'date_created': '2015-07-30T20:00:00Z',
@@ -139,7 +127,7 @@ describe('Webhook', function() {
               'factor.deleted',
               'factor.verified'
           ],
-          'webhook_method': 'post',
+          'webhook_method': 'POST',
           'webhook_url': 'https://owlbank.twilio.com',
           'status': 'disabled',
           'date_created': '2015-07-30T20:00:00Z',
@@ -162,9 +150,8 @@ describe('Webhook', function() {
     function(done) {
       holodeck.mock(new Response(500, {}));
 
-      var opts = {twilioSandboxMode: 'twilio_sandbox_mode'};
       var promise = client.verify.v2.services('VAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
-                                    .webhooks('YWXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX').remove(opts);
+                                    .webhooks('YWXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX').remove();
       promise.then(function() {
         throw new Error('failed');
       }, function(error) {
@@ -176,11 +163,9 @@ describe('Webhook', function() {
       var sid = 'YWXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
       var url = `https://verify.twilio.com/v2/Services/${serviceSid}/Webhooks/${sid}`;
 
-      var headers = {'Twilio-Sandbox-Mode': 'twilio_sandbox_mode'};
       holodeck.assertHasRequest(new Request({
         method: 'DELETE',
-        url: url,
-        headers: headers
+        url: url
       }));
     }
   );
@@ -204,9 +189,8 @@ describe('Webhook', function() {
     function(done) {
       holodeck.mock(new Response(500, {}));
 
-      var opts = {twilioSandboxMode: 'twilio_sandbox_mode'};
       var promise = client.verify.v2.services('VAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
-                                    .webhooks('YWXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX').fetch(opts);
+                                    .webhooks('YWXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX').fetch();
       promise.then(function() {
         throw new Error('failed');
       }, function(error) {
@@ -218,11 +202,9 @@ describe('Webhook', function() {
       var sid = 'YWXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
       var url = `https://verify.twilio.com/v2/Services/${serviceSid}/Webhooks/${sid}`;
 
-      var headers = {'Twilio-Sandbox-Mode': 'twilio_sandbox_mode'};
       holodeck.assertHasRequest(new Request({
         method: 'GET',
-        url: url,
-        headers: headers
+        url: url
       }));
     }
   );
@@ -238,7 +220,7 @@ describe('Webhook', function() {
               'factor.deleted',
               'factor.verified'
           ],
-          'webhook_method': 'post',
+          'webhook_method': 'POST',
           'webhook_url': 'https://owlbank.twilio.com',
           'status': 'enabled',
           'date_created': '2015-07-30T20:00:00Z',
@@ -271,7 +253,7 @@ describe('Webhook', function() {
                       'factor.deleted',
                       'factor.verified'
                   ],
-                  'webhook_method': 'post',
+                  'webhook_method': 'POST',
                   'webhook_url': 'https://owlbank.twilio.com',
                   'status': 'enabled',
                   'date_created': '2015-07-30T20:00:00Z',
@@ -307,7 +289,7 @@ describe('Webhook', function() {
                       'factor.deleted',
                       'factor.verified'
                   ],
-                  'webhook_method': 'post',
+                  'webhook_method': 'POST',
                   'webhook_url': 'https://owlbank.twilio.com',
                   'status': 'enabled',
                   'date_created': '2015-07-30T20:00:00Z',
@@ -348,7 +330,7 @@ describe('Webhook', function() {
                       'factor.deleted',
                       'factor.verified'
                   ],
-                  'webhook_method': 'post',
+                  'webhook_method': 'POST',
                   'webhook_url': 'https://owlbank.twilio.com',
                   'status': 'enabled',
                   'date_created': '2015-07-30T20:00:00Z',
@@ -374,9 +356,8 @@ describe('Webhook', function() {
     function(done) {
       holodeck.mock(new Response(500, {}));
 
-      var opts = {twilioSandboxMode: 'twilio_sandbox_mode'};
       var promise = client.verify.v2.services('VAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
-                                    .webhooks.list(opts);
+                                    .webhooks.list();
       promise.then(function() {
         throw new Error('failed');
       }, function(error) {
@@ -387,11 +368,9 @@ describe('Webhook', function() {
       var serviceSid = 'VAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
       var url = `https://verify.twilio.com/v2/Services/${serviceSid}/Webhooks`;
 
-      var headers = {'Twilio-Sandbox-Mode': 'twilio_sandbox_mode'};
       holodeck.assertHasRequest(new Request({
         method: 'GET',
-        url: url,
-        headers: headers
+        url: url
       }));
     }
   );
@@ -436,7 +415,7 @@ describe('Webhook', function() {
                       'factor.deleted',
                       'factor.verified'
                   ],
-                  'webhook_method': 'post',
+                  'webhook_method': 'POST',
                   'webhook_url': 'https://owlbank.twilio.com',
                   'status': 'enabled',
                   'date_created': '2015-07-30T20:00:00Z',
