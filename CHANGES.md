@@ -1,6 +1,18 @@
 twilio-node changelog
 =====================
 
+[2020-06-26] Version 99.99.99
+-----------------------------
+**Conversations**
+- Message delivery receipts
+
+**Flex**
+- Changed `wfm_integrations` Flex Configuration key to private **(breaking change)**
+
+**Messaging**
+- Add error states to WhatsApp Sender status with failed reason **(breaking change)**
+
+
 [2020-06-24] Version 3.47.0
 ---------------------------
 **Library - Fix**
